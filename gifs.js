@@ -1,7 +1,7 @@
 // On page load:
 $(document).ready( function() {
 // set variables:
-buttonTitles = ["thor", "captainamerica", "avengers", "ironman"]
+buttonTitles = ["thor", "captain america", "avengers", "iron man"]
 //function displayButtons
 function displayButtons() {	
 	//clear previous buttons from screen
@@ -9,7 +9,7 @@ function displayButtons() {
 	//for loop through buttonTitles
 	for(var i = 0; i < buttonTitles.length; i++) {
 		//create a jquery button
-		var buttons = $("<button>");
+		var buttons = $("<button class='btn btn-primary button'>");
 		//add attribute to jquery button created (attribute title: "button-")
 		buttons.attr("button-" + buttonTitles[i]);
 		//put the current buttonTitle that we're looping through in the button (.html)
@@ -18,6 +18,8 @@ function displayButtons() {
 		$(".panel-body").append(buttons);
 	};
 };
+
+displayButtons();
  // When the user clicks one of the buttons - function
 $('button').click(function(event) {
     // prevent default
@@ -28,24 +30,29 @@ $('button').click(function(event) {
     $('.showGifs').empty();
     // AJAX call to GIPHY
     $.ajax({
-    	url: "https://api.giphy.com/v1/gifs/search?api_key=YOUR_API_KEY&q=(THE BUTTON ATTRIBUTE WE GOT EARLIER)",
+    	url: "https://api.giphy.com/v1/gifs/search?api_key=Mp5TBPxTZUhzOHCk8vZxCsXD1ZhPHdH7&q=" + nameOfMovie,
     	method: "GET"
-    }).done ()
-        // Method | GET
-        // URL | https://api.giphy.com/v1/gifs/search?api_key=YOUR_API_KEY&q=(THE BUTTON ATTRIBUTE WE GOT EARLIER)
-        // .done
-            // loop through response.data
-                // create a jQuery div
-                // create a jQuery image
-                // Set the src attribute of the jQuery image to be image that we are looping through
-                // Add data-state attribute to jQuery image = "still"
-				// Add data-animateurl attribute to jQuery image
-				// Add data-stillurl attribute to jQuery image
-            	// create a jQuery paragrapgh
-                // Put the rating from GIPHY response into the paragrapgh created
-                // Append jQuery image to jQuery div
-                // Append jQuery paragrapgh to jQuery div
-                // Append jQuery div to page
+    }).done (function(response) {
+    	console.log(response);
+        // loop through response.data
+        for (var j = 0; j < response.data.length; j++) {
+            // create a jQuery div
+            var newDiv = $("<div>");
+            // create a jQuery image
+            var newImage = $("<img>");
+            // Set the src attribute of the jQuery image to be image that we are looping through
+            // Add data-state attribute to jQuery image = "still"
+			// Add data-animateurl attribute to jQuery image
+			// Add data-stillurl attribute to jQuery image
+        	// create a jQuery paragrapgh
+            // Put the rating from GIPHY response into the paragrapgh created
+            // Append jQuery image to jQuery div
+            // Append jQuery paragrapgh to jQuery div
+            // Append jQuery div to page
+        }
+
+    })
+
 // On click of form submit button - function
     // Create variable of user input text field
     // Push variable just created to array (buttonTitles)
