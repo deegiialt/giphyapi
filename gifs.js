@@ -1,83 +1,86 @@
 // On page load:
 $(document).ready( function() {
-// set variables:
-buttonTitles = ["thor", "captain america", "avengers", "iron man"]
-//function displayButtons
-function displayButtons() {	
-	//clear previous buttons from screen
-	$('.panel-body').empty();
-	//for loop through buttonTitles
-	for(var i = 0; i < buttonTitles.length; i++) {
-		//create a jquery button
-		var buttons = $("<button class='btn btn-primary buttonPressed'>");
-		//add attribute to jquery button created (attribute title: "button-")
-		buttons.attr("button-", buttonTitles[i]);
-		//put the current buttonTitle that we're looping through in the button (.html)
-		buttons.html(buttonTitles[i]);
-		//append the button to the page
-		$(".panel-body").append(buttons);
+	// set variables:
+	buttonTitles = ["thor", "captain america", "avengers", "iron man"]
+	//function displayButtons
+	function displayButtons() {	
+		//clear previous buttons from screen
+		$('.panel-body').empty();
+		//for loop through buttonTitles
+		for(var i = 0; i < buttonTitles.length; i++) {
+			//create a jquery button
+			var buttons = $("<button class='btn btn-primary buttonPressed'>");
+			//add attribute to jquery button created (attribute title: "button-")
+			buttons.attr("button-", buttonTitles[i]);
+			//put the current buttonTitle that we're looping through in the button (.html)
+			buttons.html(buttonTitles[i]);
+			//append the button to the page
+			$(".panel-body").append(buttons);
+		};
 	};
-};
 
-displayButtons();
- // When the user clicks one of the buttons - function
-$('.buttonPressed').click(function(event) {
-    // prevent default
-    event.preventDefault();
-    // get the attribute of the button clicked, and store in a variables
-    var nameOfMovie = $(this).attr('button-');
-    // clear out old images from the page (.empty)
-    $('.showGifs').empty();
+	displayButtons();
+	 // When the user clicks one of the buttons - function
+	$('.buttonPressed').click(function(event) {
+	    // prevent default
+	    event.preventDefault();
+	    // get the attribute of the button clicked, and store in a variables
+	    var nameOfMovie = $(this).attr('button-');
+	    // clear out old images from the page (.empty)
+	    $('.showGifs').empty();
 
-    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=Mp5TBPxTZUhzOHCk8vZxCsXD1ZhPHdH7&q=" + nameOfMovie
-    // AJAX call to GIPHY
-    $.ajax({
-    	url: queryURL,
-    	method: "GET"
-    }).done (function(movieData) {
-    	console.log(movieData);
-    	var results = movieData.data
-        // loop through response.data
-        for (var j = 0; j < results.length; j++) {
-            // create a jQuery div
-            var newDiv = $("<div>");
-            // create a jQuery image
-            var newImage = $("<img>");
-            // Set the src attribute of the jQuery image to be image that we are looping through
-            newImage.attr("src", results[j].images.original_still.url);
-            // Add data-state attribute to jQuery image = "still"
-            newImage.attr("data-state", "still");
-			// Add data-animateurl attribute to jQuery image
-			newImage.attr("data-animateurl", results[j].images.original.url);
-			// Add data-stillurl attribute to jQuery image
-			newImage.attr("data-stillurl", results[j].images.original_still.url);
-        	// create a jQuery paragrapgh
-        	var p = $("<p>");
-            // Put the rating from GIPHY response into the paragrapgh created
-            p.text(results[j].rating);
-            // Append jQuery image to jQuery div
-            newDiv.append(newImage);
-            // Append jQuery paragrapgh to jQuery div
-            newDiv.append(p);
-            // Append jQuery div to page
-            $(".showGifs").append(newDiv);
-        }
+	    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=Mp5TBPxTZUhzOHCk8vZxCsXD1ZhPHdH7&q=" + nameOfMovie
+	    // AJAX call to GIPHY
+	    $.ajax({
+	    	url: queryURL,
+	    	method: "GET"
+	    }).done (function(movieData) {
+	    	console.log(movieData);
+	    	var results = movieData.data
+	        // loop through response.data
+	        for (var j = 0; j < results.length; j++) {
+	            // create a jQuery div
+	            var newDiv = $("<div class='col-md-3'>");
+	            // create a jQuery image
+	            var newImage = $("<img class='img-thumbnail'>");
+	            // Set the src attribute of the jQuery image to be image that we are looping through
+	            newImage.attr("src", results[j].images.original_still.url);
+	            // Add data-state attribute to jQuery image = "still"
+	            newImage.attr("data-state", "still");
+				// Add data-animateurl attribute to jQuery image
+				newImage.attr("data-animateurl", results[j].images.original.url);
+				// Add data-stillurl attribute to jQuery image
+				newImage.attr("data-stillurl", results[j].images.original_still.url);
+	        	// create a jQuery paragrapgh
+	        	var p = $("<p class='panel'>");
+	            // Put the rating from GIPHY response into the paragrapgh created
+	            p.text("Rating: " + results[j].rating.toUpperCase());
+	            // Append jQuery image to jQuery div
+	            newDiv.append(newImage);
+	            // Append jQuery paragrapgh to jQuery div
+	            newDiv.append(p);
+	            // Append jQuery div to page
+	            $(".showGifs").append(newDiv);
+	        }
+	    })
 
-    })
-
-// On click of form submit button - function
-    // Create variable of user input text field
-    // Push variable just created to array (buttonTitles)
-    // Run displayButtons function
-// On click of image div - function
-    // Set variable equal to image clicked data-state attribute
-    // if (imageState == "still")
-        // Set src attribute of image clicked to be data-animateurl attribute of the image clicked
-        // Set data-state attribute of image clicked to be "animated"
-    // else if (imageState == "animated")
-		// Set src attribute of image clicked to be data-stillurl attribute of the image clicked
-		// Set data-state attribute of image clicked to be "still"
- });
+	// On click of form submit button - function
+	$('.submitButton').click(function() {
+	    // Create variable of user input text field
+	    var userInput = $(".add-movie-input").val().trim();
+	    // Push variable just created to array (buttonTitles)
+	    buttonTitles.push(userInput);
+	    // Run displayButtons function
+	// On click of image div - function
+	    // Set variable equal to image clicked data-state attribute
+	    // if (imageState == "still")
+	        // Set src attribute of image clicked to be data-animateurl attribute of the image clicked
+	        // Set data-state attribute of image clicked to be "animated"
+	    // else if (imageState == "animated")
+			// Set src attribute of image clicked to be data-stillurl attribute of the image clicked
+			// Set data-state attribute of image clicked to be "still"
+	})
+});
 
 
 
