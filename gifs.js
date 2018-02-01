@@ -19,11 +19,12 @@
 		}
 	};
 
-
+displayButtons();
 	
 	// displayButtons();
 	 // When the user clicks one of the buttons - function
-	$('.buttonPressed').click(function(event) {
+	// $('.buttonPressed').click(
+		function getImages(event) {
 	    // prevent default
 	    event.preventDefault();
 	    displayButtons();
@@ -66,10 +67,11 @@
 	            $(".showGifs").append(newDiv);
 	        }
 	    })
-	});
+	}
+	// );
 
 	// On click of form submit button - function
-	$('#submitButton').click(function(event) {
+	$('#submitButton').click(function (event) {
 		event.preventDefault();
 	    // Create variable of user input text field
 	    var userInput = $("#add-movie-input").val().trim();
@@ -79,11 +81,11 @@
 	    displayButtons();
 	})	
 
-	displayButtons();
 
 	
 	// On click of image div - function
-	$('.gif').click(function() {
+	// $('.gif').click(
+		function gif() {
 	    // Set variable equal to image clicked data-state attribute
 	    var imageState = $(this).attr("data-state");
 	    // if (imageState == "still")
@@ -98,8 +100,10 @@
 			// Set data-state attribute of image clicked to be "still"
 			$(this).attr("data-state", "still");  
 	    }
-	})
+	}
+	// )
 
 
 // });
-	// $(document).on("click", ".buttonPressed", displayButtons);
+	$(document).on("click", ".buttonPressed", getImages);
+	$(document).on("click", ".gif", gif);
