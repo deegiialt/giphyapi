@@ -1,7 +1,7 @@
 // On page load:
 $(document).ready( function() {
 	// set variables:
-	buttonTitles = ["thor", "captain america", "avengers", "iron man"]
+	buttonTitles = ["thor", "captain america", "avengers", "iron man"];
 	//function displayButtons
 	function displayButtons() {	
 		//clear previous buttons from screen
@@ -29,7 +29,7 @@ $(document).ready( function() {
 	    // clear out old images from the page (.empty)
 	    $('.showGifs').empty();
 
-	    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=Mp5TBPxTZUhzOHCk8vZxCsXD1ZhPHdH7&q=" + nameOfMovie
+	    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=Mp5TBPxTZUhzOHCk8vZxCsXD1ZhPHdH7&q=" + nameOfMovie;
 	    // AJAX call to GIPHY
 	    $.ajax({
 	    	url: queryURL,
@@ -40,9 +40,9 @@ $(document).ready( function() {
 	        // loop through response.data
 	        for (var j = 0; j < results.length; j++) {
 	            // create a jQuery div
-	            var newDiv = $("<div class='col-md-3'>");
+	            var newDiv = $("<div class='col-md-3 imageDiv'>");
 	            // create a jQuery image
-	            var newImage = $("<img class='img-thumbnail'>");
+	            var newImage = $("<img class='img-thumbnail gif'>");
 	            // Set the src attribute of the jQuery image to be image that we are looping through
 	            newImage.attr("src", results[j].images.original_still.url);
 	            // Add data-state attribute to jQuery image = "still"
@@ -65,20 +65,32 @@ $(document).ready( function() {
 	    })
 
 	// On click of form submit button - function
-	$('.submitButton').click(function() {
+	$('#submitButton').click(function(event) {
+		event.preventDefault();
 	    // Create variable of user input text field
-	    var userInput = $(".add-movie-input").val().trim();
+	    var userInput = $("#add-movie-input").val().trim();
 	    // Push variable just created to array (buttonTitles)
 	    buttonTitles.push(userInput);
+	    console.log(buttonTitles);
 	    // Run displayButtons function
+	    displayButtons();
+	})
 	// On click of image div - function
+	$('.gif').click(function() {
 	    // Set variable equal to image clicked data-state attribute
+	    var imageState = $(this).attr("data-state");
 	    // if (imageState == "still")
+	    if (imageState == "still") {
 	        // Set src attribute of image clicked to be data-animateurl attribute of the image clicked
-	        // Set data-state attribute of image clicked to be "animated"
-	    // else if (imageState == "animated")
+	        $(this).attr("src", $(this).attr('data-animateurl'));
+	        // Set data-state attribute of image clicked to be "animated" 
+	        $(this).attr("data-state", "animated");   	
+	    } else if (imageState == "animated") {
 			// Set src attribute of image clicked to be data-stillurl attribute of the image clicked
+			$(this).attr('src', $(this).attr('data-stillurl'));
 			// Set data-state attribute of image clicked to be "still"
+			$(this).attr("data-state", "still");  
+	    }
 	})
 });
 
