@@ -9,9 +9,9 @@ function displayButtons() {
 	//for loop through buttonTitles
 	for(var i = 0; i < buttonTitles.length; i++) {
 		//create a jquery button
-		var buttons = $("<button class='btn btn-primary button'>");
+		var buttons = $("<button class='btn btn-primary buttonPressed'>");
 		//add attribute to jquery button created (attribute title: "button-")
-		buttons.attr("button-" + buttonTitles[i]);
+		buttons.attr("button-", buttonTitles[i]);
 		//put the current buttonTitle that we're looping through in the button (.html)
 		buttons.html(buttonTitles[i]);
 		//append the button to the page
@@ -21,34 +21,46 @@ function displayButtons() {
 
 displayButtons();
  // When the user clicks one of the buttons - function
-$('button').click(function(event) {
+$('.buttonPressed').click(function(event) {
     // prevent default
     event.preventDefault();
     // get the attribute of the button clicked, and store in a variables
     var nameOfMovie = $(this).attr('button-');
     // clear out old images from the page (.empty)
     $('.showGifs').empty();
+
+    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=Mp5TBPxTZUhzOHCk8vZxCsXD1ZhPHdH7&q=" + nameOfMovie
     // AJAX call to GIPHY
     $.ajax({
-    	url: "https://api.giphy.com/v1/gifs/search?api_key=Mp5TBPxTZUhzOHCk8vZxCsXD1ZhPHdH7&q=" + nameOfMovie,
+    	url: queryURL,
     	method: "GET"
-    }).done (function(response) {
-    	console.log(response);
+    }).done (function(movieData) {
+    	console.log(movieData);
+    	var results = movieData.data
         // loop through response.data
-        for (var j = 0; j < response.data.length; j++) {
+        for (var j = 0; j < results.length; j++) {
             // create a jQuery div
             var newDiv = $("<div>");
             // create a jQuery image
             var newImage = $("<img>");
             // Set the src attribute of the jQuery image to be image that we are looping through
+            newImage.attr("src", results[j].images.original_still.url);
             // Add data-state attribute to jQuery image = "still"
+            newImage.attr("data-state", "still");
 			// Add data-animateurl attribute to jQuery image
+			newImage.attr("data-animateurl", results[j].images.original.url);
 			// Add data-stillurl attribute to jQuery image
+			newImage.attr("data-stillurl", results[j].images.original_still.url);
         	// create a jQuery paragrapgh
+        	var p = $("<p>");
             // Put the rating from GIPHY response into the paragrapgh created
+            p.text(results[j].rating);
             // Append jQuery image to jQuery div
+            newDiv.append(newImage);
             // Append jQuery paragrapgh to jQuery div
+            newDiv.append(p);
             // Append jQuery div to page
+            $(".showGifs").append(newDiv);
         }
 
     })
